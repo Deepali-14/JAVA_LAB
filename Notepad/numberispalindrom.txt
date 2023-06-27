@@ -1,0 +1,44 @@
+3.Number is palindrome
+
+import java.util.*;
+class NumberIsPalindromeException extends Exception
+{
+    NumberIsPalindromeException(String s)
+    {
+        super(s);
+    }
+}
+public class NumbeIsPalndrome 
+{
+    public static void main(String args[]) throws NumberIsPalindromeException
+    {
+        System.out.println("Enter any number");
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int num=n,r=0;
+
+        while(n>0)
+        {
+            int l=n%10;
+            r=l+10*r;
+            n=n/10;
+        }
+        sc.close();
+        try
+        {
+            if(r==num)
+            {
+                throw new NumberIsPalindromeException("Number Is Palindrome");
+            }
+            
+        else 
+            System.out.println("Number Is Not Palindrome");
+        }
+        catch(Exception e)
+        {
+             System.out.println(e.getMessage());
+
+        }
+    }   
+    
+}

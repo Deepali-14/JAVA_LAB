@@ -1,0 +1,97 @@
+1.student databse
+
+import java.sql.*;
+import java.util.*;
+public class student_Database  
+{
+    public static void main(String[] args) 
+    {
+        int ch=0;
+        try
+        {    Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Connection con=DriverManager.getConnection("jdbc:derby://localhost:1527/student_d","student_d","student_d");
+            Statement stmt=con.createStatement();
+           
+        while(ch!=5)
+        {
+             System.out.println("\n1.Insert\n 2.Update\n 3.Delete\n 4.View\n 5.Exit\n");
+            System.out.println("Enter your choice: ");
+            Scanner sc=new Scanner(System.in);
+            ch=sc.nextInt();
+
+           switch(ch)
+           {
+               case 1:
+                   System.out.println("Enter id");
+                   int id=sc.nextInt();
+                   System.out.println("Enter name: ");
+                   sc.nextLine();
+                   String nm=sc.nextLine();
+                   System.out.println("Enter address: ");
+//                   sc.nextLine();
+                   String ad=sc.nextLine();
+                    System.out.println("Enter city: ");
+//                   sc.nextLine();
+                   String c=sc.nextLine();
+                    System.out.println("Enter state: ");
+//                   sc.nextLine();
+                   String st=sc.nextLine();
+                   int x=stmt.executeUpdate("insert into student(id,name,address,city,state) values('"+id+"','"+nm+"','"+ad+"','"+c+"','"+st+"')");
+                   if(x>0)
+                       System.out.println("Insertion successful");
+                   else
+                       System.out.println("failed insertion");
+                   break;
+                   
+               case 2:
+                   System.out.println("Enter id to update: ");
+                   int id2=sc.nextInt();
+                   System.out.println("Enter new name: ");
+                   sc.nextLine();
+                   String nm2=sc.nextLine();
+                   System.out.println("Enter new address: ");
+//                   sc.nextLine();
+                   String ad2=sc.nextLine();
+                    System.out.println("Enter new city: ");
+//                   sc.nextLine();
+                   String c2=sc.nextLine();
+                    System.out.println("Enter new state: ");
+//                   sc.nextLine();
+                   String st2=sc.nextLine();
+                   int y=stmt.executeUpdate("update student set name='"+nm2+"',address='"+ad2+"',city='"+c2+"',state='"+st2+"'where id='"+id2+"'");
+                   if(y>0)
+                       System.out.println("Updated successful");
+                   else
+                       System.out.println("failed Update");
+               
+                   break;
+               case 3:
+                   System.out.println("Enter id");
+                   int id3=sc.nextInt();
+                   int x2=stmt.executeUpdate("delete from student where id='"+id3+"'");
+                   if(x2>0)
+                       System.out.println("Deleted successful");
+                   else
+                       System.out.println("failed deletion");
+                   break;
+               case 4:
+                    ResultSet rs=stmt.executeQuery("select * from student");
+                   while(rs.next())
+                   {
+                       System.out.println("\n"+"student name: "+rs.getString(2)+"\n"+"student id: "+rs.getString(1)+"\n"+"student address: "+rs.getString(3)+"\n"+"student city: "+rs.getString(4)+"\n"+"student state: "+rs.getString(5));
+                   }
+               break;
+               case 5:
+                   con.close();
+                   break;
+           }
+        }
+        
+    }
+     catch(Exception e)
+        {
+            
+        }
+    
+    }
+}

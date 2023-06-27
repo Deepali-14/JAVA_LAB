@@ -1,0 +1,70 @@
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Login Page</title>
+                <link rel="stylesheet" type="text/css" href="Css/style.css">
+
+    </head>
+    <body>
+        <form name='f1'>
+        <table>
+            <tr id='login'>
+                    <td>
+                        LOGIN PAGE
+                    </td>
+            </tr>
+                <tr>
+                    <td>
+                        Enter the User ID:
+                    </td>
+                    <td>
+                        <input type="text" name="txtuid" value="" size="40" id="txt"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Enter the Password :
+                    </td>
+                    <td><input type="password" name="txtpwd" value="" size="40" id="txt"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align='center'><input type="submit" value="Login" name="btn" id="btn" class="b1"/>
+                    </td>
+                </tr>
+        </table>
+            
+        </form>
+    </body>
+</html>
+
+<%
+    String uid = request.getParameter("txtuid");
+        String upwd = request.getParameter("txtpwd");
+        if(request.getParameter("btn")!=null){
+            
+           String query = "select * from logindb where UID = '"+uid+ "' and UPWD='"+upwd+"'";
+           try{
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Studentdb", "student" , "aarti");
+            Statement stmt = conn.createStatement();
+            ResultSet rs= stmt.executeQuery(query);
+            boolean status = rs.next();
+            if(status)
+                response.sendRedirect("Student.jsp");
+               //out.println("<script>alert('Record Inserted successfully!!')</script>");
+            else
+                    out.println("<script>alert('Record not Inserted successfully!!')</script>");
+            }
+    catch(Exception ex){
+        ex.printStackTrace();
+    }
+    }
+    
+%>

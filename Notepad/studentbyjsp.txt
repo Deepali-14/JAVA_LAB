@@ -1,0 +1,205 @@
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.DriverManager"%>
+
+
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Student's Form</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <body bgcolor='cream'>
+        <h1 align="center">Welcome to Student Entry Form</h1>
+        <form name="f1">
+            <table bgcolor='PINK' width='40%' align='center'>
+                <tr>
+                    <td colspan="2" align='center'>
+                        Student's Entry Form
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Student's Roll No: 
+                    </td>
+                    <td>
+                        <input type="text" value='' name="txtrno" size='40'/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Student's Name: 
+                    </td>
+                    <td>
+                        <input type='text' value='' name="txtname" size='40'/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Student's Father name:
+                    </td>
+                    <td>
+                        <input type='text' value='' name='txtfname' size='40'/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Student's Mother name:
+                    </td>
+                    <td>
+                        <input type="text" value='' name="txtmname" size='40'/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Select</td>
+                    <td>
+                        <select name="dept">
+                            <option>Btech</option>
+                            <option>Mtech</option>
+                            <option>BBA</option>
+                            <option>MBA</option>
+                            <option>BSC</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                    Gender: 
+                    </td>
+                    <td>
+                         Male <input type="radio" name="rdogender" value="male" checked="checked"/>
+                        Female <input type="radio" name="rdogender" value="female" checked="checked"/>
+                    </td>
+                    <td colspan="2">
+                        
+                    </td>
+                        
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+                        <input type="submit" value="insert" name="btninsert"/>
+                         <input type="submit" value="update" name="btnupdate"/>
+                          <input type="submit" value="delete" name="btndelete"/>
+                           <input type="submit" value="view" name="btnview"/>
+                            <input type="submit" value="Home" name="btnhome"/>
+
+                    </td>
+                </tr>
+                  
+            </table>
+        </form>
+    </body>
+    
+</html>
+<%
+  if(request.getParameter("btninsert")!=null){
+      try{
+          int rno = Integer.parseInt(request.getParameter("txtrno"));
+          String name = request.getParameter("txtname");
+          String fname= request.getParameter("txtfname");
+          String mname = request.getParameter("txtmname");
+          String sub = request.getParameter("dept");
+          String gender = request.getParameter("rdogender");
+          Class.forName("org.apache.derby.jdbc.ClientDriver");
+          Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Studjsp", "student", "rt12");
+          PreparedStatement pst = conn.prepareStatement("insert into record values(?,?,?,?,?,?)");
+          pst.setInt(1, rno);
+          pst.setString(2, name);
+          pst.setString(3, fname);
+          pst.setString(4, mname);
+          pst.setString(5, sub);
+          pst.setString(6, gender);
+          int x = pst.executeUpdate();
+          if(x>0){
+              out.println("<script>alert('Inserted successfully')</script>");
+          }
+          else{
+              out.println("<script>alert('Please try again !!')</script>");
+          }
+      }
+      catch(Exception ex){
+          ex.printStackTrace();
+          
+     }
+  
+  }
+   if(request.getParameter("btnupdate")!= null){
+        try{
+            int rno = Integer.parseInt(request.getParameter("txtrno"));
+            String name = request.getParameter("txtname");
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Studjsp", "student", "rt12");
+            PreparedStatement pst  = conn.prepareStatement("update record set name=? where rno = ?");
+            pst.setString(1, name);
+            pst.setInt(2, rno);
+            int x = pst.executeUpdate();
+            if(x>0){
+                out.println("<script>alert('updates successfully')</script>");
+            }
+            else{
+                out.println("<script>alert('Please Provide Roll number for Updation')</script>");
+            }
+            
+ 
+      
+       }
+    catch(Exception ex){
+          ex.printStackTrace();
+    }
+    }
+   if(request.getParameter("btndelete")!=null){
+       try{
+           int rno = Integer.parseInt(request.getParameter("txtrno"));
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Studjsp", "student", "rt12");
+            PreparedStatement pst  = conn.prepareStatement("delete from record where rno=?");
+            pst.setInt(1, rno);
+            int x = pst.executeUpdate();
+            if(x>0){
+              out.println("<script>alert('deleted successfully')</script>");
+
+            }
+            else{
+             out.println("<script>alert('please provide roll number to delete data')</script>");
+
+                
+            }
+           
+       }
+       catch(Exception ex){
+           ex.printStackTrace();
+       }
+   }
+   if(request.getParameter("btnview")!=null){
+       try{
+       String name = request.getParameter("txtname");
+       Class.forName("org.apache.derby.jdbc.ClientDriver");
+       Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Studjsp", "student", "rt12");
+       Statement stmt = conn.createStatement();
+       ResultSet rs = stmt.executeQuery("select * from record where name like('"+name+"%')");
+       out.println("<br>");
+       out.println("<br>");
+       out.println("<html><body><center>");
+       out.println("<table bgcolor='PINK' cellspacing='2' cellpadding='3'border='8'>");
+       out.println("<tr><td>Student's Roll No</td><td>Student's Name</td><td>Student's Father's name</td><td>Student's Mother's name</td><td>Student's subject</td><td>Gender</td></tr>");
+       while(rs.next()){
+           out.println("<tr>");
+           out.println("<td>" + rs.getInt(1)+ "</td><td>" + rs.getString(2) + "</td><td>" + rs.getString(3) + "</td><td>" + rs.getString(4) + "</td><td>" + rs.getString(5) + "</td><td>" + rs.getString(6) +"</td>");
+           out.println("</tr>");
+       }
+       out.println("</table>");
+       out.println("</center></body>");
+       out.println("</html>");
+       }
+       catch(Exception ex){
+           ex.printStackTrace();
+       }
+         
+   }
+   
+
+%>

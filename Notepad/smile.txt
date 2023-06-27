@@ -1,0 +1,21 @@
+6.smile
+
+/*<applet code=" applet4.class" height=400 width=500></applet>*/
+
+import java.applet.Applet;  
+import java.awt.*;  
+public class applet4 extends Applet
+{    
+  public void paint(Graphics g)
+  {  
+     Font f=new Font("Arial",Font.BOLD,30);
+     g.setFont(f);
+     g.drawString("kep smiling", 50, 30);
+     g.drawOval(60,60,200,200);
+     g.fillOval(90,120,50,20);
+     g.fillOval(190,120,50,20);
+     g.drawLine(165,125,165,175);
+     g.drawArc(110,130,95,95,0,-180);
+
+  }  
+}

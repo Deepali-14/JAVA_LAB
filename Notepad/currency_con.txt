@@ -1,0 +1,32 @@
+import java.util.*;
+import CurrencyConverter.*;
+public class Conversion
+{
+    public static void main(String args[])
+    {
+        currencyClass c=new currencyClass();
+        System.out.print("Enter value of money in dollar : ");
+        Scanner sc=new Scanner(System.in);
+        double s=sc.nextDouble();
+   
+        System.out.println("1. From INR to Dollar");
+        System.out.println("2. From Dollar to INR");
+           
+        int n=sc.nextInt();
+        System.out.println("Value in INR = "+c.Converter(s,n)+" Rs.");
+    }
+}
+
+
+package CurrencyConverter;
+
+public class currencyClass
+{
+    public double Converter(double c, int n)
+    {
+        if(n==1)
+            return c/82.30;
+        else
+            return c*82.30;
+    }
+}
